@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -11,12 +10,11 @@
 <title>Доставка</title>
 <style>
 :root{
-  --bg:#F2F2F7; --card:#FFFFFF; --card2:#FFFFFF;
+  --bg:#F2F2F7; --card:#FFFFFF; --card2:#F2F2F7;
   --text:#000; --text2:#8E8E93; --text3:#C7C7CC;
-  --sep:#E5E5EA; --sep2:#D1D1D6;
+  --sep:#E5E5EA;
   --blue:#007AFF; --green:#34C759; --red:#FF3B30; --orange:#FF9500; --yellow:#FFCC00;
-  --purple:#AF52DE; --teal:#5AC8FA;
-  --radius:12px; --radius-lg:16px; --radius-xl:22px;
+  --purple:#AF52DE;
   --blur:rgba(249,249,249,.82);
   --shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);
 }
@@ -24,20 +22,25 @@
   :root{
     --bg:#000; --card:#1C1C1E; --card2:#2C2C2E;
     --text:#fff; --text2:#8E8E93; --text3:#48484A;
-    --sep:#38383A; --sep2:#48484A;
+    --sep:#38383A;
     --blur:rgba(28,28,30,.82);
   }
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-html,body{height:100%}
+html{-webkit-text-size-adjust:100%}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
   background:var(--bg);color:var(--text);font-size:17px;line-height:1.4;
-  padding-bottom:calc(83px + env(safe-area-inset-bottom));
-  overflow-x:hidden;-webkit-user-select:none;user-select:none;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+  min-height:100vh;
+  overflow-x:hidden;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
 }
-input,textarea{-webkit-user-select:text;user-select:text}
-/* HEADER */
+input,textarea,button{-webkit-user-select:text;user-select:text}
+input,textarea{font-family:inherit}
+
+/* ============ NAV ============ */
 .nav{
   position:sticky;top:0;z-index:50;
   background:var(--blur);
@@ -51,15 +54,15 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .nav.scrolled .nav-title-small{opacity:1}
 .nav.scrolled .large-title{display:none}
 .large-title{font-size:34px;font-weight:700;letter-spacing:-.5px;padding:8px 0 4px}
-.nav-action{color:var(--blue);font-size:17px;font-weight:400;background:none;border:none;font-family:inherit;cursor:pointer;width:auto;padding:0;margin:0}
-/* PAGES */
-.page{display:none;padding:8px 16px 24px;animation:pageIn .28s cubic-bezier(.2,.8,.2,1)}
+.nav-action{color:var(--blue);font-size:22px;font-weight:400;background:none;border:none;font-family:inherit;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+
+/* ============ PAGES ============ */
+.page{display:none;padding:8px 16px 24px}
 .page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
-/* SECTION */
 .section-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;padding:20px 4px 8px}
-/* GROUP (inset list) */
-.group{background:var(--card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+
+/* ============ GROUPS ============ */
+.group{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
 .row-item{display:flex;align-items:center;padding:11px 16px;min-height:44px;position:relative}
 .row-item + .row-item::before{content:'';position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
 .row-item .k{flex:1;font-size:17px;color:var(--text)}
@@ -67,29 +70,56 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .row-item .v.strong{color:var(--text);font-weight:600}
 .row-item .v.green{color:var(--green);font-weight:600}
 .row-item .v.red{color:var(--red);font-weight:600}
-.row-item .v.blue{color:var(--blue)}
-.chev{color:var(--text3);font-size:13px;margin-left:2px}
-/* HERO CARD */
+.row-item .v.blue{color:var(--blue);font-weight:600}
+.row-item .v.orange{color:var(--orange);font-weight:600}
+
+/* ============ HERO ============ */
 .hero{
   background:linear-gradient(135deg,#007AFF 0%,#5856D6 100%);
-  border-radius:var(--radius-xl);padding:22px;color:#fff;
+  border-radius:22px;padding:22px;color:#fff;
   box-shadow:0 8px 24px rgba(0,122,255,.28);
   position:relative;overflow:hidden;
 }
 .hero::after{content:'';position:absolute;top:-40%;right:-20%;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);border-radius:50%}
-.hero .lbl{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+.hero .lbl{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
 .hero .big{font-size:44px;font-weight:700;letter-spacing:-1.5px;margin-top:6px;line-height:1}
-.hero .sub{font-size:15px;opacity:.85;margin-top:8px}
-/* STAT GRID */
+.hero .sub{font-size:15px;opacity:.9;margin-top:8px}
+.hero.green{background:linear-gradient(135deg,#34C759,#30D158);box-shadow:0 8px 24px rgba(52,199,89,.28)}
+.hero.orange{background:linear-gradient(135deg,#FF9500,#FF2D55);box-shadow:0 8px 24px rgba(255,149,0,.28)}
+.hero.purple{background:linear-gradient(135deg,#AF52DE,#5856D6);box-shadow:0 8px 24px rgba(175,82,222,.28)}
+
+/* ============ STAT GRID ============ */
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.stat{background:var(--card);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow)}
+.stat{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
 .stat .l{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
 .stat .v{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-top:4px}
 .stat .v.green{color:var(--green)}
 .stat .v.red{color:var(--red)}
 .stat .v.orange{color:var(--orange)}
 .stat .v.blue{color:var(--blue)}
-/* FORM */
+.stat .v.purple{color:var(--purple)}
+
+/* ============ TIMER ============ */
+.timer-card{
+  margin-top:12px;background:var(--card);border-radius:22px;
+  padding:24px 20px;text-align:center;box-shadow:var(--shadow);
+}
+.timer-card.active{background:linear-gradient(135deg,#34C759,#30D158);color:#fff}
+.timer-card.active .t-time{color:#fff}
+.timer-card.active .t-lbl{color:rgba(255,255,255,.85)}
+.timer-card.active .t-earn{color:#fff}
+.t-lbl{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.t-time{font-size:56px;font-weight:700;letter-spacing:-2px;margin:8px 0;font-variant-numeric:tabular-nums;color:var(--text);line-height:1}
+.t-earn{font-size:15px;color:var(--text2);margin-bottom:16px}
+.t-btns{display:flex;gap:10px}
+.t-btns button{flex:1;padding:16px;border-radius:14px;border:none;font-family:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:transform .1s}
+.t-btns button:active{transform:scale(.97)}
+.t-start{background:var(--blue);color:#fff}
+.t-stop{background:var(--red);color:#fff}
+.timer-card.active .t-start{background:rgba(255,255,255,.25);color:#fff}
+.timer-card.active .t-stop{background:#fff;color:#FF3B30}
+
+/* ============ FORM ============ */
 .field{padding:11px 16px;min-height:44px;display:flex;align-items:center;position:relative}
 .field + .field::before,.field + .field-stack::before,.field-stack + .field::before{content:'';position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
 .field label{font-size:17px;color:var(--text);flex:1}
@@ -105,20 +135,15 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .field-stack{display:grid;grid-template-columns:1fr 1fr;position:relative}
 .field-stack .field{border-radius:0}
 .field-stack .field:first-child::after{content:'';position:absolute;top:11px;bottom:11px;right:0;width:.5px;background:var(--sep)}
-/* BUTTONS */
-.btn{display:block;width:100%;padding:16px;border-radius:var(--radius-lg);font-size:17px;font-weight:600;font-family:inherit;border:none;cursor:pointer;transition:transform .1s,opacity .15s;letter-spacing:-.2px}
+
+/* ============ BUTTONS ============ */
+.btn{display:block;width:100%;padding:16px;border-radius:16px;font-size:17px;font-weight:600;font-family:inherit;border:none;cursor:pointer;transition:transform .1s,opacity .15s;letter-spacing:-.2px}
 .btn:active{transform:scale(.98);opacity:.85}
 .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(0,122,255,.3)}
-.btn-secondary{background:var(--card2);color:var(--blue)}
 .btn-danger{background:var(--card2);color:var(--red)}
 .btn + .btn{margin-top:10px}
-.btn-row{display:flex;gap:10px;margin-top:14px}
-.btn-row .btn{margin:0}
-/* SEGMENT */
-.segment{display:flex;background:var(--card2);border-radius:9px;padding:2px;margin:12px 0 4px}
-.segment button{flex:1;background:transparent;border:none;font-family:inherit;font-size:13px;font-weight:500;color:var(--text);padding:6px 8px;border-radius:7px;cursor:pointer;transition:.2s}
-.segment button.active{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.12);font-weight:600}
-/* HISTORY ENTRY */
+
+/* ============ HISTORY ============ */
 .entry{display:flex;align-items:center;padding:12px 16px;position:relative}
 .entry + .entry::before{content:'';position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
 .entry .date-badge{width:44px;height:44px;border-radius:11px;background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;margin-right:12px}
@@ -132,23 +157,28 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .entry .info .net.red{background:rgba(255,59,48,.15);color:var(--red)}
 .entry .info .net.orange{background:rgba(255,149,0,.15);color:var(--orange)}
 .entry .info .meta{font-size:13px;color:var(--text2);margin-top:3px}
-.entry .actions{display:flex;gap:4px;margin-left:8px}
-.icon-btn{width:32px;height:32px;border-radius:8px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text2);font-family:inherit;padding:0;transition:.15s}
+.icon-btn{width:36px;height:36px;border-radius:9px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text2);font-family:inherit;padding:0;margin-left:4px}
 .icon-btn:active{background:var(--card2)}
-/* PROGRESS */
+
+/* ============ PROGRESS ============ */
 .prog{height:8px;background:var(--sep);border-radius:4px;overflow:hidden;margin-top:12px}
 .prog .fill{height:100%;background:linear-gradient(90deg,#007AFF,#5AC8FA);border-radius:4px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
-/* BARS CHART */
+.prog .fill.green{background:linear-gradient(90deg,#34C759,#30D158)}
+.prog .fill.orange{background:linear-gradient(90deg,#FF9500,#FFCC00)}
+
+/* ============ BARS ============ */
 .bars{display:flex;align-items:flex-end;gap:5px;height:130px;margin-top:12px;padding:0 4px}
 .bar{flex:1;background:linear-gradient(180deg,#007AFF,#5AC8FA);border-radius:6px 6px 3px 3px;min-height:3px;position:relative;transition:height .4s cubic-bezier(.2,.8,.2,1)}
 .bar.today{background:linear-gradient(180deg,#FF9500,#FFCC00)}
 .bar .v{position:absolute;bottom:100%;left:0;right:0;text-align:center;font-size:9px;color:var(--text2);font-weight:600;margin-bottom:4px}
 .bar .d{position:absolute;top:100%;left:0;right:0;text-align:center;font-size:10px;color:var(--text2);margin-top:6px}
-/* EMPTY */
+
+/* ============ EMPTY ============ */
 .empty{padding:48px 24px;text-align:center}
 .empty .ico{font-size:44px;opacity:.35;margin-bottom:12px}
 .empty .t{font-size:15px;color:var(--text2);line-height:1.4}
-/* TABBAR */
+
+/* ============ TABBAR ============ */
 .tabbar{
   position:fixed;bottom:0;left:0;right:0;z-index:100;
   background:var(--blur);
@@ -157,13 +187,15 @@ input,textarea{-webkit-user-select:text;user-select:text}
   border-top:.5px solid var(--sep);
   display:flex;
   padding:6px 0 calc(6px + env(safe-area-inset-bottom));
+  transform:translateZ(0);
 }
 .tabbar .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;color:var(--text2);cursor:pointer;background:none;border:none;font-family:inherit;transition:.15s}
 .tabbar .tab.active{color:var(--blue)}
 .tabbar .tab .ico{font-size:23px;line-height:1;transition:transform .2s}
 .tabbar .tab.active .ico{transform:scale(1.05)}
-.tabbar .tab .txt{font-size:10px;font-weight:500;letter-spacing:.01em}
-/* SHEET */
+.tabbar .tab .txt{font-size:10px;font-weight:500}
+
+/* ============ SHEET ============ */
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
 .sheet-bg.on{opacity:1;pointer-events:auto}
 .sheet{
@@ -171,13 +203,14 @@ input,textarea{-webkit-user-select:text;user-select:text}
   background:var(--bg);border-radius:16px 16px 0 0;
   padding:8px 16px calc(20px + env(safe-area-inset-bottom));
   transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
-  max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
 }
 .sheet.on{transform:none}
 .sheet-handle{width:36px;height:5px;background:var(--text3);border-radius:3px;margin:0 auto 12px}
 .sheet h3{font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.sheet h3 .cancel{color:var(--blue);font-size:17px;font-weight:400;background:none;border:none;font-family:inherit;cursor:pointer}
-/* FAB */
+.sheet h3 .cancel{color:var(--blue);font-size:17px;font-weight:400;background:none;border:none;font-family:inherit;cursor:pointer;padding:0}
+
+/* ============ FAB ============ */
 .fab{
   position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));right:20px;z-index:60;
   width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;
@@ -187,31 +220,40 @@ input,textarea{-webkit-user-select:text;user-select:text}
   transition:transform .15s;cursor:pointer;
 }
 .fab:active{transform:scale(.92)}
-/* MISC */
-.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.pill.blue{background:rgba(0,122,255,.15);color:var(--blue)}
-.pill.green{background:rgba(52,199,89,.15);color:var(--green)}
-.pill.orange{background:rgba(255,149,0,.15);color:var(--orange)}
+.fab.hidden{display:none}
+
 .muted{color:var(--text2);font-size:15px}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ============ NAV ============ -->
 <div class="nav" id="nav">
   <div class="nav-row">
     <div class="nav-title-small" id="nav-small">Доставка</div>
-    <button class="nav-action" onclick="openSheet()">＋</button>
+    <button class="nav-action" onclick="openSheetFor()" id="nav-plus">＋</button>
   </div>
   <div class="large-title" id="nav-large">Сегодня</div>
 </div>
 
-<!-- ========== СЕГОДНЯ ========== -->
+<!-- ============ СЕГОДНЯ ============ -->
 <div class="page active" id="p-today">
-  <div class="hero">
+  <!-- Таймер -->
+  <div class="timer-card" id="timerCard">
+    <div class="t-lbl" id="timerLbl">Таймер смены</div>
+    <div class="t-time" id="timerTime">00:00:00</div>
+    <div class="t-earn" id="timerEarn">Не запущен</div>
+    <div class="t-btns">
+      <button class="t-start" id="timerBtn" onclick="toggleTimer()">▶ Старт</button>
+      <button class="t-stop" id="timerStopBtn" onclick="stopAndSave()" style="display:none">■ Стоп</button>
+    </div>
+  </div>
+
+  <div class="hero" style="margin-top:12px">
     <div class="lbl">Заработано сегодня</div>
     <div class="big" id="t-earn">0 ₽</div>
-    <div class="sub" id="t-sub">Нет смен · начни с ＋</div>
+    <div class="sub" id="t-sub">Нет смен</div>
   </div>
 
   <div class="stats">
@@ -223,13 +265,13 @@ input,textarea{-webkit-user-select:text;user-select:text}
 
   <div class="section-title">История смен</div>
   <div class="group" id="history">
-    <div class="empty"><div class="ico">📭</div><div class="t">Пока нет смен.<br>Нажми ＋ чтобы добавить.</div></div>
+    <div class="empty"><div class="ico">📭</div><div class="t">Пока нет смен.<br>Нажми ＋ или ▶ Старт.</div></div>
   </div>
 </div>
 
-<!-- ========== НЕДЕЛЯ ========== -->
+<!-- ============ НЕДЕЛЯ ============ -->
 <div class="page" id="p-week">
-  <div class="hero">
+  <div class="hero green">
     <div class="lbl">Чистыми за неделю</div>
     <div class="big" id="w-net">0 ₽</div>
     <div class="sub" id="w-period">—</div>
@@ -246,6 +288,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
     <div class="row-item"><span class="k">Всего часов</span><span class="v strong" id="w-hours">0</span></div>
     <div class="row-item"><span class="k">Средний ₽/час</span><span class="v orange" id="w-rate">0</span></div>
     <div class="row-item"><span class="k">Расходы</span><span class="v red" id="w-exp">0 ₽</span></div>
+    <div class="row-item"><span class="k">Пробег за неделю</span><span class="v blue" id="w-km">0 км</span></div>
   </div>
 
   <div class="section-title">Закрытие штрафов</div>
@@ -254,13 +297,13 @@ input,textarea{-webkit-user-select:text;user-select:text}
       <span style="font-size:15px;color:var(--text2)">Прогресс</span>
       <span style="font-size:17px;font-weight:600" id="w-fine-txt">0 / 12 000 ₽</span>
     </div>
-    <div class="prog"><div class="fill" id="w-fine-bar" style="width:0%"></div></div>
+    <div class="prog"><div class="fill orange" id="w-fine-bar" style="width:0%"></div></div>
   </div>
 </div>
 
-<!-- ========== МЕСЯЦ ========== -->
+<!-- ============ МЕСЯЦ ============ -->
 <div class="page" id="p-month">
-  <div class="hero" style="background:linear-gradient(135deg,#34C759,#30D158)">
+  <div class="hero green" style="background:linear-gradient(135deg,#34C759,#30D158)">
     <div class="lbl">Чистыми за месяц</div>
     <div class="big" id="m-net">0 ₽</div>
     <div class="sub" id="m-period">—</div>
@@ -280,9 +323,30 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
 </div>
 
-<!-- ========== ЦЕЛЬ ========== -->
+<!-- ============ БЕНЗИН ============ -->
+<div class="page" id="p-fuel">
+  <div class="hero purple">
+    <div class="lbl">Стоимость 1 км</div>
+    <div class="big" id="f-cost-km">0 ₽</div>
+    <div class="sub" id="f-cost-sub">Добавь первую заправку</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="l">Расход</div><div class="v orange" id="f-l100">0</div><div class="muted" style="font-size:11px;margin-top:2px">л / 100 км</div></div>
+    <div class="stat"><div class="l">Пробег</div><div class="v blue" id="f-total-km">0</div><div class="muted" style="font-size:11px;margin-top:2px">км всего</div></div>
+    <div class="stat"><div class="l">Потрачено</div><div class="v red" id="f-total-cost">0 ₽</div></div>
+    <div class="stat"><div class="l">Заправок</div><div class="v purple" id="f-count">0</div></div>
+  </div>
+
+  <div class="section-title">Журнал заправок</div>
+  <div class="group" id="fuelList">
+    <div class="empty"><div class="ico">⛽️</div><div class="t">Нет заправок.<br>Нажми ＋ чтобы добавить.</div></div>
+  </div>
+</div>
+
+<!-- ============ ЦЕЛЬ ============ -->
 <div class="page" id="p-goal">
-  <div class="hero" style="background:linear-gradient(135deg,#FF9500,#FF2D55)">
+  <div class="hero orange">
     <div class="lbl">Цель — закрыть штрафы</div>
     <div class="big">12 000 ₽</div>
     <div class="sub" id="g-hero-sub">Осталось: 12 000 ₽</div>
@@ -310,17 +374,18 @@ input,textarea{-webkit-user-select:text;user-select:text}
 </div>
 
 <!-- FAB -->
-<button class="fab" onclick="openSheet()" id="fab">＋</button>
+<button class="fab" onclick="openSheetFor()" id="fab">＋</button>
 
 <!-- TABBAR -->
 <div class="tabbar">
   <button class="tab active" data-page="today"><span class="ico">📅</span><span class="txt">Сегодня</span></button>
   <button class="tab" data-page="week"><span class="ico">📊</span><span class="txt">Неделя</span></button>
   <button class="tab" data-page="month"><span class="ico">📈</span><span class="txt">Месяц</span></button>
+  <button class="tab" data-page="fuel"><span class="ico">⛽️</span><span class="txt">Бензин</span></button>
   <button class="tab" data-page="goal"><span class="ico">🎯</span><span class="txt">Цель</span></button>
 </div>
 
-<!-- SHEET: ДОБАВИТЬ СМЕНУ -->
+<!-- ============ SHEET: СМЕНА ============ -->
 <div class="sheet-bg" id="sheet-bg" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
@@ -338,6 +403,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <div class="group">
     <div class="field"><label>Заработано ₽</label><input type="number" inputmode="numeric" id="f-earn" placeholder="0"></div>
     <div class="field"><label>Потеряно часов</label><input type="number" inputmode="decimal" id="f-lost" value="0" step="0.5"></div>
+    <div class="field"><label>Пробег, км</label><input type="number" inputmode="decimal" id="f-km" value="0" step="1"></div>
   </div>
 
   <div class="section-title" style="padding-top:14px">Расходы</div>
@@ -350,20 +416,60 @@ input,textarea{-webkit-user-select:text;user-select:text}
 
   <input type="hidden" id="edit-id">
   <button class="btn btn-primary" onclick="saveEntry()" style="margin-top:20px">Сохранить</button>
-  <button class="btn btn-danger" onclick="deleteCurrent()" id="del-btn" style="display:none;margin-top:10px">Удалить смену</button>
+  <button class="btn btn-danger" onclick="deleteCurrent()" id="del-btn" style="display:none;margin-top:10px">Удалить</button>
+</div>
+
+<!-- ============ SHEET: ЗАПРАВКА ============ -->
+<div class="sheet" id="fuelSheet">
+  <div class="sheet-handle"></div>
+  <h3 id="fuel-sheet-title">Заправка <button class="cancel" onclick="closeFuelSheet()">Отмена</button></h3>
+
+  <div class="group">
+    <div class="field"><label>Дата</label><input type="date" id="fu-date"></div>
+    <div class="field"><label>Одометр, км</label><input type="number" inputmode="numeric" id="fu-odo" placeholder="например 125000"></div>
+    <div class="field"><label>Литров</label><input type="number" inputmode="decimal" id="fu-liters" placeholder="0" step="0.1"></div>
+    <div class="field"><label>Цена за литр ₽</label><input type="number" inputmode="decimal" id="fu-price" placeholder="0" step="0.01"></div>
+    <div class="field"><label>Сумма ₽</label><input type="number" inputmode="numeric" id="fu-total" placeholder="авто" readonly style="color:var(--text2)"></div>
+  </div>
+
+  <input type="hidden" id="fuel-edit-id">
+  <button class="btn btn-primary" onclick="saveFuel()" style="margin-top:20px">Сохранить</button>
+  <button class="btn btn-danger" onclick="deleteFuel()" id="fuel-del-btn" style="display:none;margin-top:10px">Удалить</button>
 </div>
 
 <script>
-var KEY='delivery_v2';
+/* ============ STORAGE ============ */
+var KEY='delivery_v3';
+var FUEL_KEY='delivery_fuel_v1';
+var TIMER_KEY='delivery_timer_v1';
+
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
 function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
+function loadFuel(){try{return JSON.parse(localStorage.getItem(FUEL_KEY))||[]}catch(e){return[]}}
+function saveFuel(d){localStorage.setItem(FUEL_KEY,JSON.stringify(d))}
+function getTimer(){try{return JSON.parse(localStorage.getItem(TIMER_KEY))}catch(e){return null}}
+function setTimer(t){if(t)localStorage.setItem(TIMER_KEY,JSON.stringify(t));else localStorage.removeItem(TIMER_KEY)}
+
+/* ============ UTILS ============ */
 function fmt(n){return Math.round(n).toLocaleString('ru-RU')+' ₽'}
-function todayISO(){var d=new Date();return d.toISOString().slice(0,10)}
+function fmt2(n){return (Math.round(n*100)/100).toLocaleString('ru-RU')}
+function todayISO(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function toMin(t){if(!t)return 0;var p=t.split(':');return (+p[0])*60+(+p[1]||0)}
 function vibrate(ms){if(navigator.vibrate)try{navigator.vibrate(ms||8)}catch(e){}}
+function pad(n){return String(n).padStart(2,'0')}
+function hhmmss(sec){
+  var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=Math.floor(sec%60);
+  return pad(h)+':'+pad(m)+':'+pad(s);
+}
+function nowTimeStr(){
+  var d=new Date();
+  return pad(d.getHours())+':'+pad(d.getMinutes());
+}
+function nowDateTimeStr(){return todayISO()+'T'+nowTimeStr()}
 
+/* ============ STATS ============ */
 function stats(entries){
-  var g=0,h=0,exp=0,fine=0;
+  var g=0,h=0,exp=0,fine=0,km=0;
   entries.forEach(function(e){
     var sh=toMin(e.end)-toMin(e.start);
     if(sh<0)sh+=1440;
@@ -372,38 +478,72 @@ function stats(entries){
     g+=(e.earn||0); h+=eff;
     exp+=(e.rent||0)+(e.gas||0)+(e.other||0);
     fine+=(e.fine||0);
+    km+=(e.km||0);
   });
-  return {gross:g,hours:h,exp:exp,fine:fine,net:g-exp-fine,rate:h>0?g/h:0};
+  return {gross:g,hours:h,exp:exp,fine:fine,net:g-exp-fine,rate:h>0?g/h:0,km:km};
 }
 
-/* NAV SCROLL */
-var lastY=0;
-window.addEventListener('scroll',function(){
-  var n=document.getElementById('nav');
-  if(window.scrollY>30)n.classList.add('scrolled');else n.classList.remove('scrolled');
-});
+/* ============ TIMER ============ */
+var timerTick=null;
 
-/* NAVIGATION */
-document.querySelectorAll('.tabbar .tab').forEach(function(b){
-  b.addEventListener('click',function(){
-    var p=b.getAttribute('data-page');
-    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
-    document.getElementById('p-'+p).classList.add('active');
-    document.querySelectorAll('.tabbar .tab').forEach(function(x){x.classList.remove('active')});
-    b.classList.add('active');
-    var titles={today:'Сегодня',week:'Неделя',month:'Месяц',goal:'Цель'};
-    document.getElementById('nav-large').textContent=titles[p];
-    document.getElementById('nav-small').textContent=titles[p];
-    window.scrollTo({top:0,behavior:'instant'});
-    vibrate(8);
-  });
-});
+function renderTimer(){
+  var t=getTimer();
+  var card=document.getElementById('timerCard');
+  var timeEl=document.getElementById('timerTime');
+  var earnEl=document.getElementById('timerEarn');
+  var startBtn=document.getElementById('timerBtn');
+  var stopBtn=document.getElementById('timerStopBtn');
+  var lbl=document.getElementById('timerLbl');
 
-/* SHEET */
+  if(t){
+    card.classList.add('active');
+    lbl.textContent='Смена идёт';
+    var sec=Math.floor((Date.now()-t.start)/1000);
+    timeEl.textContent=hhmmss(sec);
+    var h=(sec/3600).toFixed(2);
+    earnEl.textContent='Начало в '+t.startTime+' · '+h+' ч';
+    startBtn.style.display='none';
+    stopBtn.style.display='block';
+  } else {
+    card.classList.remove('active');
+    lbl.textContent='Таймер смены';
+    timeEl.textContent='00:00:00';
+    earnEl.textContent='Не запущен';
+    startBtn.style.display='block';
+    stopBtn.style.display='none';
+  }
+}
+
+function toggleTimer(){
+  var t=getTimer();
+  if(t){
+    // Пауза? Нет — у нас старт/стоп. Если уже идёт — ничего.
+    return;
+  }
+  setTimer({start:Date.now(),startTime:nowTimeStr(),date:todayISO()});
+  vibrate(15);
+  renderTimer();
+  if(!timerTick)timerTick=setInterval(renderTimer,1000);
+}
+
+function stopAndSave(){
+  var t=getTimer();
+  if(!t)return;
+  var elapsed=Math.floor((Date.now()-t.start)/1000);
+  setTimer(null);
+  vibrate(20);
+  renderTimer();
+  // Открываем sheet для заполнения заработка
+  openSheet();
+  document.getElementById('f-date').value=t.date;
+  document.getElementById('f-start').value=t.startTime;
+  document.getElementById('f-end').value=nowTimeStr();
+}
+
+/* ============ ENTRY FORM ============ */
 function openSheet(editId){
   document.getElementById('sheet-bg').classList.add('on');
   document.getElementById('sheet').classList.add('on');
-  document.body.style.overflow='hidden';
   if(!editId){
     document.getElementById('edit-id').value='';
     document.getElementById('sheet-title').innerHTML='Новая смена <button class="cancel" onclick="closeSheet()">Отмена</button>';
@@ -412,6 +552,7 @@ function openSheet(editId){
     document.getElementById('f-end').value='21:00';
     document.getElementById('f-earn').value='';
     document.getElementById('f-lost').value='0';
+    document.getElementById('f-km').value='0';
     document.getElementById('f-rent').value='1000';
     document.getElementById('f-gas').value='1000';
     document.getElementById('f-fine').value='1715';
@@ -427,6 +568,7 @@ function openSheet(editId){
     document.getElementById('f-end').value=e.end;
     document.getElementById('f-earn').value=e.earn||0;
     document.getElementById('f-lost').value=e.lost||0;
+    document.getElementById('f-km').value=e.km||0;
     document.getElementById('f-rent').value=e.rent||0;
     document.getElementById('f-gas').value=e.gas||0;
     document.getElementById('f-fine').value=e.fine||0;
@@ -437,7 +579,8 @@ function openSheet(editId){
 function closeSheet(){
   document.getElementById('sheet-bg').classList.remove('on');
   document.getElementById('sheet').classList.remove('on');
-  document.body.style.overflow='';
+  document.getElementById('fuelSheet').classList.remove('on');
+  document.getElementById('fuel-edit-id').value='';
 }
 function deleteCurrent(){
   var id=document.getElementById('edit-id').value;
@@ -458,6 +601,7 @@ function saveEntry(){
     end:document.getElementById('f-end').value,
     earn:earn,
     lost:+document.getElementById('f-lost').value||0,
+    km:+document.getElementById('f-km').value||0,
     rent:+document.getElementById('f-rent').value||0,
     gas:+document.getElementById('f-gas').value||0,
     fine:+document.getElementById('f-fine').value||0,
@@ -472,7 +616,101 @@ function saveEntry(){
   render();
 }
 
-/* RENDER */
+/* ============ FUEL ============ */
+function openFuelSheet(editId){
+  document.getElementById('sheet-bg').classList.add('on');
+  document.getElementById('fuelSheet').classList.add('on');
+  if(!editId){
+    document.getElementById('fuel-edit-id').value='';
+    document.getElementById('fuel-sheet-title').innerHTML='Новая заправка <button class="cancel" onclick="closeSheet()">Отмена</button>';
+    document.getElementById('fu-date').value=todayISO();
+    document.getElementById('fu-odo').value='';
+    document.getElementById('fu-liters').value='';
+    document.getElementById('fu-price').value='';
+    document.getElementById('fu-total').value='';
+    document.getElementById('fuel-del-btn').style.display='none';
+  } else {
+    var f=loadFuel().find(function(x){return x.id===editId});
+    if(!f)return;
+    document.getElementById('fuel-edit-id').value=f.id;
+    document.getElementById('fuel-sheet-title').innerHTML='Редактировать <button class="cancel" onclick="closeSheet()">Отмена</button>';
+    document.getElementById('fu-date').value=f.date;
+    document.getElementById('fu-odo').value=f.odo||0;
+    document.getElementById('fu-liters').value=f.liters||0;
+    document.getElementById('fu-price').value=f.price||0;
+    document.getElementById('fu-total').value=f.total||0;
+    document.getElementById('fuel','-del-btn').style.display='block';
+  }
+}
+авfunction closeFuelSheet(){closeSheet()г}
+
+function recalcFuelTotal','(){
+ сен',' var l=+document.getElementById('fu-liters').value||0;
+  var p=+document.getElementById('fu-price').value||0;
+  document.getElementById('fu-total').value=Math.round(l*p);
+}
+document.addEventListener('input',function(ev){
+  if(ev.target.id==='fu-liters'||ev.target.id==='fu-price')recalcFuelTotal();
+});
+
+function saveFuel(){
+  var d=document.getElementById('fu-date').value;
+  var odo=+document.getElementById('fu-odo').value||0;
+  var liters=+document.getElementById('fu-liters').value||0;
+  var price=+document.getElementById('fu-price').value||0;
+  var total=Math.round(liters*price);
+  if(!d||!liters||!price){alert('Заполни дату, литры и цену');return}
+  var id=document.getElementById('fuel-edit-id').value||Date.now().toString();
+  var entry={id:id,date:d,odo:odo,liters:liters,price:price,total:total};
+  var all=loadFuel();
+  var i=all.findIndex(function(x){return x.id===id});
+  if(i>=0)all[i]=entry;else all.push(entry);
+  saveFuel(all);
+  vibrate(15);
+  closeSheet();
+  render();
+}
+
+function deleteFuel(){
+  var id=document.getElementById('fuel-edit-id').value;
+  if(!id)return;
+  if(!confirm('Удалить заправку?'))return;
+  saveFuel(loadFuel().filter(function(x){return x.id!==id}));
+  closeSheet();render();
+}
+
+/* ============ NAVIGATION ============ */
+document.querySelectorAll('.tabbar .tab').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.getAttribute('data-page');
+    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
+    document.getElementById('p-'+p).classList.add('active');
+    document.querySelectorAll('.tabbar .tab').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    var titles={today:'Сегодня',week:'Неделя',month:'Месяц',fuel:'Бензин',goal:'Цель'};
+    document.getElementById('nav-large').textContent=titles[p];
+    document.getElementById('nav-small').textContent=titles[p];
+    window.scrollTo(0,0);
+    vibrate(8);
+  });
+});
+
+function openSheetFor(){
+  // Открываем нужный sheet в зависимости от активной страницы
+  if(document.getElementById('p-fuel').classList.contains('active')){
+    openFuelSheet();
+  } else {
+    openSheet();
+  }
+}
+
+/* Скролл */
+window.addEventListener('scroll',function(){
+  var n=document.getElementById('nav');
+  if(window.scrollY>30)n.classList.add('scrolled');else n.classList.remove('scrolled');
+},{passive:true});
+
+/* ============ RENDER ============ */
 function render(){
   var all=load();
   var today=todayISO();
@@ -481,9 +719,9 @@ function render(){
   document.getElementById('t-earn').textContent=fmt(st.gross);
   var sub=document.getElementById('t-sub');
   if(todayE.length){
-    sub.textContent=st.hours.toFixed(1)+' ч · '+Math.round(st.rate)+' ₽/ч';
+    sub.textContent=st.hours.toFixed(1)+' ч · '+Math.round(st.rate)+' ₽/ч · '+st.km+' км';
   } else {
-    sub.textContent='Нет смен · начни с ＋';
+    sub.textContent='Нет смен';
   }
   var netEl=document.getElementById('t-net');
   netEl.textContent=fmt(st.net);
@@ -497,9 +735,9 @@ function render(){
   hist.innerHTML='';
   var sorted=all.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,30);
   if(!sorted.length){
-    hist.innerHTML='<div class="empty"><div class="ico">📭</div><div class="t">Пока нет смен.<br>Нажми ＋ чтобы добавить.</div></div>';
+    hist.innerHTML='<div class="empty"><div class="ico">📭</div><div class="t">Пока нет смен.<br>Нажми ▶ Старт или ＋.</div></div>';
   } else {
-    var monthNames=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    var mn=['янв','фев','мар','апр','май','июн','июлокт','ноя','дек'];
     sorted.forEach(function(e){
       var s=stats([e]);
       var dt=new Date(e.date+'T00:00:00');
@@ -507,16 +745,17 @@ function render(){
       var row=document.createElement('div');
       row.className='entry';
       row.innerHTML=
-        '<div class="date-badge"><div class="d">'+dt.getDate()+'</div><div class="m">'+monthNames[dt.getMonth()]+'</div></div>'+
+        '<div class="date-badge"><div class="d">'+dt.getDate()+'</div><div class="m">'+mn[dt.getMonth()]+'</div></div>'+
         '<div class="info"><div class="top"><span class="earn">'+fmt(e.earn||0)+'</span><span class="net '+netCls+'">'+fmt(s.net)+'</span></div>'+
-        '<div class="meta">'+e.start+'–'+e.end+' · '+s.hours.toFixed(1)+' ч · '+Math.round(s.rate)+' ₽/ч</div></div>'+
-        '<div class="actions"><button class="icon-btn" onclick="openSheet(\''+e.id+'\')">✏️</button></div>';
+        '<div class="meta">'+e.start+'–'+e.end+' · '+s.hours.toFixed(1)+' ч'+(e.km?' · '+e.km+' км':'')+'</div></div>'+
+        '<button class="icon-btn" onclick="openSheet(\''+e.id+'\')">✏️</button>';
       hist.appendChild(row);
     });
   }
 
   renderWeek(all);
   renderMonth(all);
+  renderFuel();
   calcGoal(all);
 }
 
@@ -538,11 +777,12 @@ function renderWeek(all){
   document.getElementById('w-hours').textContent=st.hours.toFixed(1);
   document.getElementById('w-rate').textContent=Math.round(st.rate);
   document.getElementById('w-exp').textContent=fmt(st.exp+st.fine);
+  document.getElementById('w-km').textContent=st.km+' км';
 
   var days=[];var maxE=1;
   for(var i=0;i<7;i++){
     var d=new Date(start.getTime()+i*86400000);
-    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    var ds=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
     var v=we.filter(function(e){return e.date===ds}).reduce(function(a,e){return a+(e.earn||0)},0);
     if(v>maxE)maxE=v;
     days.push({d:d,v:v,isToday:ds===todayISO()});
@@ -589,7 +829,7 @@ function renderMonth(all){
   var maxE=1;var days=[];
   for(var d=1;d<=end.getDate();d++){
     var dd=new Date(now.getFullYear(),now.getMonth(),d);
-    var ds=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');
+    var ds=dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate());
     var v=dayData[ds]||0;if(v>maxE)maxE=v;
     days.push({d:d,v:v});
   }
@@ -605,6 +845,63 @@ function renderMonth(all){
   });
 }
 
+/* ============ FUEL RENDER ============ */
+function renderFuel(){
+  var fuel=loadFuel().slice().sort(function(a,b){
+    if(a.odo&&b.odo)return a.odo-b.odo;
+    return a.date.localeCompare(b.date);
+  });
+  var totalL=0,totalCost=0,count=fuel.length;
+  fuel.forEach(function(f){totalL+=f.liters||0;totalCost+=f.total||0});
+
+  // Пробег между первой и последней заправкой с одометром
+  var withOdo=fuel.filter(function(f){return f.odo>0});
+  var totalKm=0;
+  if(withOdo.length>=2){
+    totalKm=withOdo[withOdo.length-1].odo - withOdo[0].odo;
+  }
+  // Расход л/100км: берём литры кроме первой заправки / пробег * 100
+  var l100=0;
+  if(withOdo.length>=2 && totalKm>0){
+    var litersExceptFirst=0;
+    for(var i=1;i<withOdo.length;i++)litersExceptFirst+=(withOdo[i].liters||0);
+    l100=litersExceptFirst/totalKm*100;
+  }
+  var costPerKm=(totalKm>0)?(totalCost/totalKm):0;
+
+  document.getElementById('f-cost-km').textContent=costPerKm>0?fmt2(costPerKm)+' ₽':'0 ₽';
+  document.getElementById('f-cost-sub').textContent=totalKm>0
+    ?('На '+totalKm.toLocaleString('ru-RU')+' км · '+fmt(totalCost))
+    :'Добавь 2+ заправки с одометром';
+  document.getElementById('f-l100').textContent=l100>0?fmt2(l100):'0';
+  document.getElementById('f-total-km').textContent=totalKm.toLocaleString('ru-RU');
+  document.getElementById('f-total-cost').textContent=fmt(totalCost);
+  document.getElementById('f-count').textContent=count;
+
+  var list=document.getElementById('fuelList');
+  list.innerHTML='';
+  if(!count){
+    list.innerHTML='<div class="empty"><div class="ico">⛽️</div><div class="t">Нет заправок.<br>Нажми ＋ чтобы добавить.</div></div>';
+    return;
+  }
+  var sorted=fuel.slice().reverse();
+  sorted.forEach(function(f){
+    var row=document.createElement('div');
+    row.className='entry';
+    var mn=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    var dt=new Date(f.date+'T00:00:00');
+    var detail=fmt2(f.liters)+' л × '+fmt2(f.price)+' ₽';
+    if(f.odo)detail+=' · '+f.odo.toLocaleString('ru-RU')+' км';
+    row.innerHTML=
+      '<div class="date-badge"><div class="d">'+dt.getDate()+'</div><div class="m">'+mn[dt.getMonth()]+'</div></div>'+
+      '<div class="info"><div class="top"><span class="earn">'+fmt(f.total||0)+'</span></div>'+
+      '<div class="meta">'+detail+'</div></div>'+
+      '<button class="icon-btn" onclick="openFuelSheet(\''+f.id+'\')">✏️</button>';
+    list.appendChild(row);
+  });
+}
+
+/* ============ GOAL ============ */
 function calcGoal(all){
   var fine=+document.getElementById('c-fine').value||0;
   var days=+document.getElementById('c-days').value||1;
@@ -634,8 +931,19 @@ function calcGoal(all){
   document.getElementById(id).addEventListener('input',function(){render()});
 });
 
-/* INIT */
+/* ============ INIT ============ */
 document.getElementById('f-date').value=todayISO();
+document.getElementById('fu-date').value=todayISO();
+
+// Если таймер был запущен до закрытия — продолжаем
+if(getTimer()){timerTick=setInterval(renderTimer,1000);}
+
+// Восстанавливаемся при возврате из фона
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden)renderTimer();
+});
+
+renderTimer();
 render();
 </script>
 </body>
