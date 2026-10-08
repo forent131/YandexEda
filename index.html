@@ -30,8 +30,6 @@ radial-gradient(circle at 90% 80%,rgba(34,211,238,.15),transparent 45%);
 filter:blur(40px);animation:bgS 25s ease-in-out infinite}
 @keyframes bgS{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(3%,-2%) scale(1.06)}66%{transform:translate(-2%,3%) scale(1.03)}}
 input{-webkit-user-select:text;user-select:text;font-family:inherit}input,button{outline:none;font-family:inherit}
-
-/* SPLASH */
 .splash{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;
 padding:env(safe-area-inset-top) 20px calc(24px + env(safe-area-inset-bottom));
 overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg);transition:opacity .4s,transform .4s}
@@ -77,8 +75,6 @@ font-size:28px;flex-shrink:0;position:relative;z-index:1}
 .svc:active .svc-arr{transform:translateX(4px)}
 .s-foot{text-align:center;color:var(--tx3);font-size:11px;padding-top:20px;opacity:0;
 animation:fadeUp .5s ease .75s forwards}
-
-/* APP */
 .app{display:none;min-height:100vh;padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 .app.on{display:block;animation:appIn .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes appIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
@@ -285,7 +281,7 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
       <span class="svc-arr">›</span>
     </div>
   </div>
-  <div class="s-foot" id="sFoot">Работает офлайн · Данные в телефоне</div>
+  <div class="s-foot">Работает офлайн · Данные в телефоне</div>
 </div>
 
 <!-- DELIVERY -->
@@ -295,7 +291,7 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
       <button class="nav-back" onclick="exit()">‹ Сервисы</button>
       <div class="nav-right">
         <button class="nav-act" id="dSync" onclick="openSync()">☁️</button>
-        <button class="nav-act" onclick="openFor()">＋</button>
+        <button class="nav-act" id="dPlus" onclick="openFor()">＋</button>
       </div>
     </div>
     <div class="nav-title" id="dnT">Сегодня</div>
@@ -376,9 +372,9 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
       <div class="row"><span class="k">Идёшь</span><span class="v b" id="gPace">—</span></div>
       <div class="row"><span class="k">Лучший день</span><span class="v c" id="gBest">—</span></div>
     </div>
-    <div class="section">Дневник цели</div>
+    <div class="section">Смены в этом месяце</div>
     <div class="group" id="gList">
-      <div class="empty"><div class="i">📊</div><div class="t">Нет записей.<br>Нажми ＋ чтобы добавить.</div></div>
+      <div class="empty"><div class="i">📊</div><div class="t">Нет смен в этом месяце.</div></div>
     </div>
     <div style="padding:22px 4px 0">
       <button class="btn btn-c" onclick="openGoalSheet()">⚙️ Настроить цель</button>
@@ -537,19 +533,6 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
   <button class="btn btn-c" onclick="saveGoal()" style="margin-top:22px">Сохранить</button>
 </div>
 
-<div class="sheet" id="shDay">
-  <div class="sheet-handle"></div>
-  <h3 id="dayT">День <button class="cancel" onclick="closeSheets()">Отмена</button></h3>
-  <div class="group">
-    <div class="field"><label>Дата</label><input type="date" id="dayDate"></div>
-    <div class="field"><label>Заработано ₽</label><input type="number" inputmode="numeric" id="dayAmt" placeholder="0"></div>
-    <div class="field"><label>Заметка</label><input type="text" id="dayNote" placeholder="например, дождь"></div>
-  </div>
-  <input type="hidden" id="dayId">
-  <button class="btn btn-c" onclick="saveDay()" style="margin-top:22px">Сохранить</button>
-  <button class="btn btn-d" onclick="delDay()" id="dayDel" style="display:none;margin-top:10px">Удалить</button>
-</div>
-
 <div class="sheet" id="shSync">
   <div class="sheet-handle"></div>
   <h3>☁️ Облако <button class="cancel" onclick="closeSheets()">Отмена</button></h3>
@@ -561,7 +544,7 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
     <div class="field"><label>Токен</label><input type="password" id="syToken" placeholder="ghp_..." autocomplete="off"></div>
   </div>
   <p style="font-size:12px;color:var(--tx2);padding:12px 18px 0;line-height:1.5">
-    Токен: github.com/settings/tokens → Classic → галочка <b>repo</b>. Хранится только на телефоне.
+    Токен: github.com/settings/tokens → Classic → галочка <b>repo</b>.
   </p>
   <div class="section">Статус</div>
   <div class="group">
@@ -580,8 +563,8 @@ box-shadow:0 12px 40px rgba(0,0,0,.6)}
 <div class="toast" id="toast"></div>
 
 <script>
-const SH='dv_shifts_v6',FU='dv_fuel_v6',DB='dv_debt_v6',DBT='dv_debt_total_v6',TMR='dv_timer_v6',
-GOALK='dv_goal_v6',GDAYS='dv_goal_days_v6',SYN='dv_sync_v6';
+const SH='dv_shifts_v7',FU='dv_fuel_v7',DB='dv_debt_v7',DBT='dv_debt_total_v7',TMR='dv_timer_v7',
+GOALK='dv_goal_v7',SYN='dv_sync_v7';
 const load=k=>{try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}};
 const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const getT=()=>{try{return JSON.parse(localStorage.getItem(TMR))}catch(e){return null}};
@@ -800,17 +783,17 @@ function renderF(){
   });
 }
 
+/* GOAL — данные берутся из смен */
 function renderG(){
   const goal=getGoal();
-  const all=load(GDAYS).filter(x=>x.date.startsWith(goal.month));
-  const earned=all.reduce((a,x)=>a+(x.amount||0),0);
+  const all=load(SH).filter(e=>e.date.startsWith(goal.month));
+  const earned=all.reduce((a,e)=>a+(e.earn||0),0);
   const pct=goal.amount>0?Math.min(100,earned/goal.amount*100):0;
   const left=Math.max(0,goal.amount-earned);
   document.getElementById('gEarned').textContent=fmt(earned);
   document.getElementById('gSub').textContent='из '+fmt(goal.amount)+' · '+monthName(goal.month);
   document.getElementById('gPct').textContent=Math.round(pct)+'%';
-  const bar=document.getElementById('gBar');
-  bar.style.width=pct+'%';
+  document.getElementById('gBar').style.width=pct+'%';
   document.getElementById('gHero').classList.toggle('done',pct>=100);
   document.getElementById('gLeft').textContent=fmt(left);
   const now=new Date();
@@ -834,20 +817,23 @@ function renderG(){
   else if(avg>=goal.amount/totalDays)document.getElementById('gPace').textContent='опережаешь';
   else if(avg>0)document.getElementById('gPace').textContent='отстаёшь';
   else document.getElementById('gPace').textContent='—';
-  const best=all.reduce((a,x)=>!a||(x.amount||0)>a.amount?x:a,null);
-  document.getElementById('gBest').textContent=best?fmt(best.amount):'—';
+  const best=all.reduce((a,e)=>!a||(e.earn||0)>a.earn?e:a,null);
+  document.getElementById('gBest').textContent=best?fmt(best.earn):'—';
   const list=document.getElementById('gList');list.innerHTML='';
   const sorted=all.slice().sort((a,b)=>b.date.localeCompare(a.date));
   if(!sorted.length){
-    list.innerHTML='<div class="empty"><div class="i">📊</div><div class="t">Нет записей.<br>Нажми ＋ чтобы добавить.</div></div>';
+    list.innerHTML='<div class="empty"><div class="i">📊</div><div class="t">Нет смен в этом месяце.</div></div>';
   } else {
-    sorted.forEach(d=>{
-      const dt=new Date(d.date+'T00:00:00');
+    sorted.forEach(e=>{
+      const s=statsShifts([e]);
+      const dt=new Date(e.date+'T00:00:00');
+      const cls=s.net>=2500?'g':s.net>=1500?'o':'r';
       const row=document.createElement('div');row.className='entry';
       row.innerHTML=`<div class="badge"><div class="d">${dt.getDate()}</div><div class="m">${MN[dt.getMonth()]}</div></div>
-        <div class="info"><div class="earn">${fmt(d.amount||0)}</div>
-        <div class="meta">${d.note||'Без заметки'}</div></div>
-        <button class="icon-btn" onclick="openDaySheet('${d.id}')">✏️</button>`;
+        <div class="info"><div class="top"><span class="earn">${fmt(e.earn||0)}</span>
+        <span class="net ${cls}">${fmt(s.net)}</span></div>
+        <div class="meta">${e.start}–${e.end} · ${s.hours.toFixed(1)} ч</div></div>
+        <button class="icon-btn" onclick="openShift('${e.id}')">✏️</button>`;
       list.appendChild(row);
     });
   }
@@ -871,44 +857,6 @@ function saveGoal(){
   closeSheets();renderG();
   toast('Цель: '+fmt(amount),'g');
   autoPush();
-}
-function openDaySheet(id){
-  closeSheets();
-  document.getElementById('sb').classList.add('on');
-  document.getElementById('shDay').classList.add('on');
-  if(!id){
-    document.getElementById('dayId').value='';
-    document.getElementById('dayT').innerHTML='День <button class="cancel" onclick="closeSheets()">Отмена</button>';
-    document.getElementById('dayDate').value=todayISO();
-    document.getElementById('dayAmt').value='';
-    document.getElementById('dayNote').value='';
-    document.getElementById('dayDel').style.display='none';
-  } else {
-    const d=load(GDAYS).find(x=>x.id===id);if(!d)return;
-    document.getElementById('dayId').value=d.id;
-    document.getElementById('dayT').innerHTML='Редактировать <button class="cancel" onclick="closeSheets()">Отмена</button>';
-    document.getElementById('dayDate').value=d.date;
-    document.getElementById('dayAmt').value=d.amount||0;
-    document.getElementById('dayNote').value=d.note||'';
-    document.getElementById('dayDel').style.display='block';
-  }
-}
-function saveDay(){
-  const date=document.getElementById('dayDate').value;
-  const amount=+document.getElementById('dayAmt').value||0;
-  if(!date||!amount){alert('Заполни дату и сумму');return}
-  const id=document.getElementById('dayId').value||Date.now().toString();
-  const entry={id,date,amount,note:document.getElementById('dayNote').value||''};
-  const all=load(GDAYS);const i=all.findIndex(x=>x.id===id);
-  if(i>=0)all[i]=entry;else all.push(entry);
-  save(GDAYS,all);vib(15);
-  closeSheets();renderG();autoPush();
-}
-function delDay(){
-  const id=document.getElementById('dayId').value;if(!id)return;
-  if(!confirm('Удалить запись?'))return;
-  save(GDAYS,load(GDAYS).filter(x=>x.id!==id));
-  closeSheets();renderG();autoPush();
 }
 
 function renderB(){
@@ -1133,7 +1081,7 @@ function delDebt(){
 }
 function openFor(){
   if(document.getElementById('dp-fuel').classList.contains('on'))openFuel();
-  else if(document.getElementById('dp-goal').classList.contains('on'))openDaySheet();
+  else if(document.getElementById('dp-goal').classList.contains('on'))openGoalSheet();
   else openShift();
 }
 function openDebtFor(){openDebt()}
@@ -1149,7 +1097,7 @@ document.querySelectorAll('#dTabs .tab').forEach(b=>{
     document.getElementById('dnT').textContent=t[p];
     document.getElementById('dFab').classList.toggle('hide',p==='week'||p==='month');
     document.getElementById('dFab').classList.toggle('c',p==='goal');
-    document.getElementById('dFab').textContent=(p==='goal')?'＋':'＋';
+    document.getElementById('dPlus').textContent=p==='goal'?'⚙️':'＋';
     window.scrollTo(0,0);vib(8);
   });
 });
@@ -1241,8 +1189,7 @@ async function _push(showAlert){
       debt:load(DB),
       debtTotal:getTotal(),
       timer:getT(),
-      goal:getGoal(),
-      goalDays:load(GDAYS)
+      goal:getGoal()
     };
     const existing=await getFile();
     await putFile(JSON.stringify(payload),existing?existing.sha:undefined);
@@ -1270,7 +1217,6 @@ async function _pull(){
     setTotal(p.debtTotal||12000);
     p.timer?setT(p.timer):setT(null);
     if(p.goal)setGoal(p.goal);
-    save(GDAYS,p.goalDays||[]);
     c.lastSync=new Date().toISOString();setCfg(c);
     vib(20);
     toast('✅ Данные загружены','g');
@@ -1289,7 +1235,6 @@ function autoPush(){
 document.getElementById('fDate').value=todayISO();
 document.getElementById('fuDate').value=todayISO();
 document.getElementById('dbDate').value=todayISO();
-document.getElementById('dayDate').value=todayISO();
 document.getElementById('cTotal').value=getTotal();
 document.getElementById('goalMon').value=getGoal().month;
 if(getT())tInt=setInterval(renderTimer,1000);
