@@ -1029,6 +1029,120 @@ document.getElementById('fu-date').value=todayISO();
 document.getElementById('d-date').value=todayISO();
 document.getElementById('c-total').value=getTotalDebt();
 if(getTimer())timerInterval=setInterval(renderTimer,1000);
+/* ============ GITHUB SYNC ============ */
+(function(){
+  var SYNC_KEY='dv_sync_v1';
+  var getSync=function(){try{return JSON.parse(localStorage.getItem(SYNC_KEY))||{}}catch(e){return{}}};
+  var setSync=function(s){localStorage.setItem(SYNC_KEY,JSON.stringify(s))};
+
+  // UI
+  var html='<div class="sheet" id="syncSheet">'
+    +'<div class="sheet-handle"></div>'
+    +'<h3>☁️ Синхронизация <button class="cancel" onclick="closeAllSheets()">Отмена</button></h3>'
+    +'<div class="section">GitHub токен</div>'
+    +'<div class="group"><div class="field"><label>Personal Token</label>'
+    +'<input type="password" id="sy-token" placeholder="ghp_..." autocomplete="off"></div></div>'
+    +'<p style="font-size:12px;color:var(--text2);padding:10px 16px 0;line-height:1.4">Создай на github.com/settings/tokens — тип Classic, галочка только «gist». Хранится только на этом телефоне.</p>'
+    +'<div class="section">Статус</div>'
+    +'<div class="group">'
+    +'<div class="row"><span class="k">Gist ID</span><span class="v" id="sy-gistid">—</span></div>'
+    +'<div class="row"><span class="k">Обновлено</span><span class="v" id="sy-last">—</span></div>'
+    +'</div>'
+    +'<div class="section">Действия</div>'
+    +'<div class="group">'
+    +'<div class="row" onclick="window._doPush()" style="cursor:pointer"><span class="k">☁️ Загрузить на GitHub</span><span class="v">›</span></div>'
+    +'<div class="row" onclick="window._doPull()" style="cursor:pointer"><span class="k">⬇️ Скачать с GitHub</span><span class="v">›</span></div>'
+    +'</div>'
+    +'<button class="btn btn-primary" onclick="window._saveToken()" style="margin-top:16px">Сохранить токен</button>'
+    +'</div>';
+  document.body.insertAdjacentHTML('beforeend',html);
+
+  // Кнопка ☁️ в навбарах
+  document.querySelectorAll('.nav-action').forEach(function(btn){
+    var s=document.createElement('button');
+    s.className='nav-action';s.textContent='☁️';s.style.fontSize='18px';
+    s.onclick=openSync;
+    btn.parentNode.insertBefore(s,btn);
+  });
+
+  function openSync(){
+    closeAllSheets();
+    document.getElementById('sheetBg').classList.add('on');
+    document.getElementById('syncSheet').classList.add('on');
+    var c=getSync();
+    document.getElementById('sy-token').value=c.token||'';
+    document.getElementById('sy-gistid').textContent=c.gistId?c.gistId.slice(0,10)+'…':'—';
+    document.getElementById('sy-last').textContent=c.lastSync?new Date(c.lastSync).toLocaleString('ru-RU'):'—';
+  }
+
+  window._saveToken=function(){
+    var t=document.getElementById('sy-token').value.trim();
+    setSync(Object.assign({},getSync(),{token:t}));
+    alert('Токен сохранён');
+    openSync();
+  };
+
+  window._doPush=async function(){
+    var c=getSync();
+    if(!c.token){alert('Сначала вставь токен');return}
+    try{
+      var payload={
+        shifts:load(SK),fuel:load(FK),debt:load(DK),
+        debtTotal:getTotalDebt(),timer:getTimer(),
+        updatedAt:new Date().toISOString()
+      };
+      var body={description:'Курьер — данные',public:false,
+        files:{'courier-data.json':{content:JSON.stringify(payload)}}};
+      var url='https://api.github.com/gists',method='POST';
+      if(c.gistId){url+='/'+c.gistId;method='PATCH'}
+      var res=await fetch(url,{method:method,
+        headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+        body:JSON.stringify(body)});
+      if(!res.ok)throw new Error(res.status+' '+await res.text());
+      var data=await res.json();
+      setSync(Object.assign({},getSync(),{gistId:data.id,lastSync:new Date().toISOString()}));
+      alert('✅ Загружено на GitHub');
+      openSync();
+    }catch(e){alert('Ошибка: '+e.message)}
+  };
+
+  window._doPull=async function(){
+    var c=getSync();
+    if(!c.token||!c.gistId){alert('Сначала настрой синхронизацию');return}
+    if(!confirm('Заменить текущие данные данными с GitHub?'))return;
+    try{
+      var res=await fetch('https://api.github.com/gists/'+c.gistId,
+        {headers:{'Authorization':'Bearer '+c.token}});
+      if(!res.ok)throw new Error(res.status);
+      var data=await res.json();
+      var file=data.files['courier-data.json'];
+      if(!file)throw new Error('Файл не найден');
+      var p=JSON.parse(file.content);
+      save(SK,p.shifts||[]);save(FK,p.fuel||[]);save(DK,p.debt||[]);
+      setTotalDebt(p.debtTotal||12000);
+      if(p.timer)setTimer(p.timer);else setTimer(null);
+      setSync(Object.assign({},getSync(),{lastSync:new Date().toISOString()}));
+      alert('✅ Данные загружены');
+      renderDelivery();renderDebt();
+      closeAllSheets();
+    }catch(e){alert('Ошибка: '+e.message)}
+  };
+
+  // Авто-пуш после сохранений (если есть токен)
+  var pushTimer=null;
+  function autoPush(){
+    if(!getSync().token)return;
+    clearTimeout(pushTimer);
+    pushTimer=setTimeout(function(){window._doPush().catch(function(){})},1500);
+  }
+  ['saveEntry','saveFuel','saveDebt','deleteShift','deleteFuel','deleteDebt'].forEach(function(fn){
+    if(typeof window[fn]==='function'){
+      var orig=window[fn];
+      window[fn]=function(){var r=orig.apply(this,arguments);autoPush();return r};
+    }
+  });
+})();
+
 </script>
 </body>
 </html>
