@@ -52,7 +52,6 @@ body::after{
 input{-webkit-user-select:text;user-select:text;font-family:inherit}
 input,button{outline:none;font-family:inherit}
 
-/* SPLASH */
 .splash{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;
 padding:env(safe-area-inset-top) 20px calc(24px + env(safe-area-inset-bottom));
 overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg);transition:opacity .4s,transform .4s}
@@ -98,7 +97,6 @@ font-size:26px;flex-shrink:0;position:relative;z-index:1}
 .s-foot{text-align:center;color:var(--tx3);font-size:10.5px;padding-top:18px;opacity:0;letter-spacing:.02em;
 animation:fadeUp .5s ease .75s forwards}
 
-/* APP */
 .app{display:none;min-height:100vh;padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 .app.on{display:block;animation:appIn .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes appIn{from{opacity:0;transform:translateY(16px) scale(.99)}to{opacity:1;transform:none}}
@@ -291,7 +289,7 @@ transform:translateX(-50%) translateY(20px);background:rgba(26,25,34,.96);
 border:1px solid var(--bd2);color:var(--tx);padding:12px 20px;border-radius:14px;
 font-size:13.5px;font-weight:600;opacity:0;transition:.3s;z-index:900;
 backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);pointer-events:none;
-box-shadow:0 12px 40px rgba(0,0,0,.55)}
+box-shadow:0 12px 40px rgba(0,0,0,.55);max-width:calc(100% - 40px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.g{border-color:rgba(52,211,153,.4)}
 .toast.r{border-color:rgba(244,63,94,.4)}
@@ -318,7 +316,6 @@ box-shadow:0 12px 40px rgba(0,0,0,.55)}
   <div class="s-foot">Работает офлайн · Данные в телефоне</div>
 </div>
 
-<!-- DELIVERY -->
 <div class="app" id="app-delivery">
   <div class="nav">
     <div class="nav-row">
@@ -435,7 +432,6 @@ box-shadow:0 12px 40px rgba(0,0,0,.55)}
   </div>
 </div>
 
-<!-- DEBT -->
 <div class="app" id="app-debt">
   <div class="nav">
     <div class="nav-row">
@@ -494,7 +490,6 @@ box-shadow:0 12px 40px rgba(0,0,0,.55)}
 
 <div class="sheet-bg" id="sb" onclick="closeSheets()"></div>
 
-<!-- Day detail sheet -->
 <div class="sheet" id="shDayDetail">
   <div class="sheet-handle"></div>
   <h3 id="ddTitle">Детали дня <button class="cancel" onclick="closeSheets()">Закрыть</button></h3>
@@ -612,8 +607,8 @@ box-shadow:0 12px 40px rgba(0,0,0,.55)}
 <div class="toast" id="toast"></div>
 
 <script>
-const SH='dv_shifts_v8',FU='dv_fuel_v8',DB='dv_debt_v8',DBT='dv_debt_total_v8',TMR='dv_timer_v8',
-GOALK='dv_goal_v8',SYN='dv_sync_v8';
+const SH='dv_shifts_v9',FU='dv_fuel_v9',DB='dv_debt_v9',DBT='dv_debt_total_v9',TMR='dv_timer_v9',
+GOALK='dv_goal_v9',SYN='dv_sync_v9';
 const load=k=>{try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}};
 const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const getT=()=>{try{return JSON.parse(localStorage.getItem(TMR))}catch(e){return null}};
@@ -640,7 +635,7 @@ const DOW=['воскресенье','понедельник','вторник','�
 function monthName(ym){const[a,b]=ym.split('-').map(Number);return MNfull[b-1]+' '+a}
 function toast(msg,type){const el=document.getElementById('toast');
 el.textContent=msg;el.className='toast on'+(type?' '+type:'');
-clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2200)}
+clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2600)}
 
 function enter(name){
   vib(12);
@@ -981,7 +976,6 @@ function celebrate(){
   }
 }
 
-/* ============ DAY DETAIL ============ */
 function openDayDetail(id){
   const e=load(SH).find(x=>x.id===id);
   if(!e)return;
@@ -1330,6 +1324,50 @@ function autoPush(){
   pushT=setTimeout(()=>{_push(0)},2000);
 }
 
+/* ============ URL PARAMS ============ */
+function handleURLParams(){
+  const params=new URLSearchParams(window.location.search);
+  const earn=parseFloat(params.get('earn'));
+  const hours=parseFloat(params.get('hours'));
+  if(!earn||!hours)return false;
+
+  const km=parseFloat(params.get('km'))||0;
+  const date=params.get('date')||todayISO();
+  const now=new Date();
+  const endTime=pad(now.getHours())+':'+pad(now.getMinutes());
+  const startDate=new Date(now.getTime()-hours*3600000);
+  const startTime=pad(startDate.getHours())+':'+pad(startDate.getMinutes());
+
+  const entry={
+    id:Date.now().toString(),
+    date:date,
+    start:startTime,
+    end:endTime,
+    earn:earn,
+    lost:0,
+    km:km,
+    rent:1000,
+    gas:1000,
+    other:0
+  };
+
+  const all=load(SH);
+  all.push(entry);
+  save(SH,all);
+
+  window.history.replaceState({},'',window.location.pathname);
+
+  setTimeout(()=>{
+    enter('delivery');
+    setTimeout(()=>{
+      toast('✅ Добавлено: '+fmt(earn)+' · '+hours+' ч','g');
+    },600);
+  },100);
+
+  setTimeout(()=>autoPush(),1500);
+  return true;
+}
+
 document.getElementById('fDate').value=todayISO();
 document.getElementById('fuDate').value=todayISO();
 document.getElementById('dbDate').value=todayISO();
@@ -1337,10 +1375,14 @@ document.getElementById('cTotal').value=getTotal();
 document.getElementById('goalMon').value=getGoal().month;
 if(getT())tInt=setInterval(renderTimer,1000);
 renderTimer();
-setTimeout(()=>{
-  const c=getCfg();
-  if(c.token&&c.owner&&c.repo&&c.auto!==false)_pull().catch(()=>{});
-},500);
+
+const handled=handleURLParams();
+if(!handled){
+  setTimeout(()=>{
+    const c=getCfg();
+    if(c.token&&c.owner&&c.repo&&c.auto!==false)_pull().catch(()=>{});
+  },500);
+}
 </script>
 </body>
 </html>
